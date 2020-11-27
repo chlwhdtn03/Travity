@@ -1,6 +1,10 @@
 package com.david0926.travity.model;
 
+import com.david0926.travity.database.DataManagerKt;
+
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class UserModel {
 
@@ -9,6 +13,8 @@ public class UserModel {
     private ArrayList<TodoModel> todoModels;
     private ArrayList<TodoModel> thingModels; // 준비물
     private ArrayList<FlightModel> flightModels; // 현재 비행 정보
+
+    private HashMap<String, Boolean> settings = new HashMap<>();
 
     public UserModel(){}
 
@@ -35,6 +41,29 @@ public class UserModel {
         this.todoModels = todoModels;
         this.thingModels = thingModels;
         this.flightModels = flightModels;
+    }
+
+    public HashMap<String, Boolean> getSettings() {
+
+        getSetting(Settings.ALARM_EVENT);
+        getSetting(Settings.ALARM_CHECKIN);
+
+        return settings;
+    }
+
+    public boolean getSetting(Settings setting) {
+        if(!settings.containsKey(setting.toString())) {
+            settings.put(setting.toString(), false);
+        }
+        return settings.get(setting.toString());
+    }
+
+    public void setSettings(HashMap<String, Boolean> settings) {
+        this.settings = settings;
+    }
+
+    public void addSettings(String key, Boolean value) {
+        this.settings.put(key, value);
     }
 
     public String getName() {

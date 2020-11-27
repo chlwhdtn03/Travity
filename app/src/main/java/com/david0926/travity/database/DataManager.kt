@@ -2,10 +2,7 @@ package com.david0926.travity.database
 
 import android.content.Context
 import android.util.Log
-import com.david0926.travity.model.FlightModel
-import com.david0926.travity.model.NotificationModel
-import com.david0926.travity.model.TodoModel
-import com.david0926.travity.model.UserModel
+import com.david0926.travity.model.*
 import com.david0926.travity.util.UserCache
 import kotlinx.android.synthetic.main.activity_login.view.*
 import org.json.JSONObject
@@ -119,6 +116,28 @@ fun updateNotifications(context: Context, arr: ArrayList<NotificationModel>) {
             .set(usermodel)
             .addOnSuccessListener {
                 Log.e("DataManager", "성공적으로 알람 기록을 저장하였습니다.")
+            }
+            .addOnFailureListener {
+
+            }
+    UserCache.setUser(context, usermodel)
+}
+
+/**
+ *  "자신의"  알람 기록에 대해서만 수정하여 업로드 합니다.
+ *   변경사항은 UserCache에 자동으로 반영됩니다.
+ */
+fun updateSettings(context: Context, map: HashMap<String, Boolean>) {
+    var usermodel = UserCache.getUser(context);
+    usermodel.settings = map;
+    for(i in usermodel.settings) {
+        Log.w("DATA", i.key + ", " + i.value)
+    }
+    db.collection("users")
+            .document(usermodel.email)
+            .set(usermodel)
+            .addOnSuccessListener {
+                Log.e("DataManager", "성공적으로 설정 항목들을 저장하였습니다.")
             }
             .addOnFailureListener {
 
